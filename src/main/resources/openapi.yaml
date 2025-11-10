@@ -1,0 +1,440 @@
+openapi: 3.0.4
+info:
+  description: "Administración de artistas, discográficas, álbumes, canciones y archivos\
+    \ de audio."
+  title: Microservicio de Contenidos
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- description: "Operaciones de artistas, discográficas, álbumes, canciones y archivos\
+    \ de audio."
+  name: contents
+paths:
+  /artists:
+    get:
+      description: Devuelve el listado completo de artistas disponibles en la plataforma.
+      operationId: listArtists
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/artist"
+                type: array
+          description: OK
+      summary: Listado de artistas
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /albums:
+    get:
+      description: Devuelve el listado completo de álbumes publicados.
+      operationId: listAlbums
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/album"
+                type: array
+          description: OK
+      summary: Listado de álbumes
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /tracks:
+    get:
+      description: Devuelve el listado de canciones disponibles en la plataforma.
+      operationId: listTracks
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/track"
+                type: array
+          description: OK
+      summary: Listado de canciones
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /albums/{idAlbum}:
+    get:
+      description: Obtiene los datos completos de un álbum específico.
+      operationId: getAlbumById
+      parameters:
+      - explode: false
+        in: path
+        name: idAlbum
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/album"
+          description: OK
+        "404":
+          description: Not Found
+      summary: Información de álbum por ID
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /artists/{idArtist}/albums:
+    get:
+      description: Obtiene todos los álbumes publicados por un artista determinado.
+      operationId: listArtistAlbums
+      parameters:
+      - explode: false
+        in: path
+        name: idArtist
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/album"
+                type: array
+          description: OK
+        "404":
+          description: Not Found
+      summary: Álbumes por artista
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+    post:
+      description: Crea un nuevo álbum asociado a un artista (requiere rol artista).
+      operationId: createAlbum
+      parameters:
+      - explode: false
+        in: path
+        name: idArtist
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createAlbum_request"
+        description: Datos del nuevo álbum
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: Crear álbum
+      tags:
+      - contents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /tracks/{idTrack}:
+    get:
+      description: Devuelve los datos de una canción específica.
+      operationId: getTrackById
+      parameters:
+      - explode: false
+        in: path
+        name: idTrack
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/track"
+          description: OK
+        "404":
+          description: Not Found
+      summary: Información de canción por ID
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /artists/{idArtist}/tracks:
+    get:
+      description: Devuelve todas las canciones publicadas por un artista.
+      operationId: listArtistTracks
+      parameters:
+      - explode: false
+        in: path
+        name: idArtist
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/track"
+                type: array
+          description: OK
+        "404":
+          description: Not Found
+      summary: Canciones por artista
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /artists/{idArtist}:
+    get:
+      description: Devuelve la información detallada de un artista por su identificador.
+      operationId: getArtistById
+      parameters:
+      - explode: false
+        in: path
+        name: idArtist
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/artist"
+          description: OK
+        "404":
+          description: Not Found
+      summary: Información de artista
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /albums/{idAlbum}/tracks:
+    post:
+      description: Añade una nueva canción a un álbum (requiere rol artista).
+      operationId: uploadTrack
+      parameters:
+      - explode: false
+        in: path
+        name: idAlbum
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/uploadTrack_request"
+        description: Datos de la canción a subir
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: Subir canción
+      tags:
+      - contents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+  /artists/{idArtist}/subscriptions:
+    get:
+      description: Devuelve los usuarios que siguen al artista especificado.
+      operationId: getArtistSubscribers
+      parameters:
+      - explode: false
+        in: path
+        name: idArtist
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/subscription"
+                type: array
+          description: OK
+        "404":
+          description: Not Found
+      summary: Usuarios suscritos al artista
+      tags:
+      - contents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: contents
+components:
+  schemas:
+    artist:
+      example:
+        user_id: usr_001
+        name: David bisbal
+        genre: Ambient
+        description: Artista de pop
+        id: art_001
+      properties:
+        id:
+          example: art_001
+          type: string
+        user_id:
+          example: usr_001
+          type: string
+        name:
+          example: David bisbal
+          type: string
+        description:
+          example: Artista de pop
+          type: string
+        genre:
+          example: Ambient
+          type: string
+      type: object
+    album:
+      example:
+        cover_url: https://avatar.iran.liara.run/public/40
+        release_date: 2008-09-09
+        id: alb_101
+        title: La ley innata
+        artist_id: art_001
+      properties:
+        id:
+          example: alb_101
+          type: string
+        artist_id:
+          example: art_001
+          type: string
+        title:
+          example: La ley innata
+          type: string
+        release_date:
+          example: 2008-09-09
+          type: string
+        cover_url:
+          example: https://avatar.iran.liara.run/public/40
+          type: string
+      type: object
+    track:
+      example:
+        duration: 03:45
+        file_url: https://cdn.musica.com/tracks/de-acero.mp3
+        album_id: alb_101
+        id: trk_301
+        title: De acero
+        published_at: 2025-10-16T20:00:00Z
+      properties:
+        id:
+          example: trk_301
+          type: string
+        album_id:
+          example: alb_101
+          type: string
+        title:
+          example: De acero
+          type: string
+        duration:
+          example: 03:45
+          type: string
+        file_url:
+          example: https://cdn.musica.com/tracks/de-acero.mp3
+          type: string
+        published_at:
+          example: 2025-10-16T20:00:00Z
+          type: string
+      type: object
+    subscription:
+      example:
+        user_id: usr_777
+        created_at: 2025-10-15T18:00:00Z
+        artist_id: art_001
+      properties:
+        user_id:
+          example: usr_777
+          type: string
+        artist_id:
+          example: art_001
+          type: string
+        created_at:
+          example: 2025-10-15T18:00:00Z
+          type: string
+      type: object
+    createAlbum_request:
+      properties:
+        title:
+          example: La ley innata
+          type: string
+        release_date:
+          example: 2008-09-09
+          type: string
+        cover_url:
+          example: https://avatar.iran.liara.run/public/40
+          type: string
+      required:
+      - cover_url
+      - release_date
+      - title
+      type: object
+    uploadTrack_request:
+      properties:
+        title:
+          example: De acero
+          type: string
+        duration:
+          example: 03:45
+          type: string
+        file_url:
+          example: https://cdn.musica.com/tracks/de-acero.mp3
+          type: string
+      required:
+      - duration
+      - file_url
+      - title
+      type: object
