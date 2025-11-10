@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+
+  contenido_db:
+    image: postgres:latest
+    container_name: contenido_db
+    environment:
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: 123454321
+      POSTGRES_DB: contenido_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - contenido-data:/var/lib/postgresql
+      - ./init/contenido_init.sql:/docker-entrypoint-initdb.d/contenido_init.sql
+    restart: unless-stopped
+
+volumes:
+  contenido-data:
