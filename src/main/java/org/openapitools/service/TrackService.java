@@ -38,22 +38,35 @@ public class TrackService {
                 .map(this::toDto);
     }
 
-    // --- ESTE ES EL MÉTODO QUE TE FALTABA O DABA ERROR ---
+// En TrackService.java
+
     public Track createTrackForAlbum(String idAlbum, UploadTrackRequest dto) {
+        // 1. Buscar álbum
         AlbumEntity album = albumRepository.findById(idAlbum)
                 .orElseThrow(() -> new RuntimeException("Álbum no encontrado con id: " + idAlbum));
 
+        // --- VALIDACIÓN 1: DUPLICADOS ---
+        if (trackRepository.existsByTitleAndAlbum(dto.getTitle(), album)) {
+            throw new IllegalArgumentException("Error: Este álbum ya contiene la canción '" + dto.getTitle() + "'");
+        }
+
+        // --- VALIDACIÓN 2: FORMATO AUDIO ---
+        String url = dto.getFileUrl().toLowerCase();
+        if (!url.endsWith(".mp3") && !url.endsWith(".wav")) {
+            throw new IllegalArgumentException("Error: El archivo debe ser un audio (.mp3 o .wav)");
+        }
+
+        // 2. Crear entidad
         TrackEntity entity = new TrackEntity();
         entity.setId("trk_" + UUID.randomUUID().toString());
         entity.setTitle(dto.getTitle());
         entity.setDuration(dto.getDuration());
         entity.setFileUrl(dto.getFileUrl());
         entity.setPublishedAt(OffsetDateTime.now().toString());
-        
         entity.setAlbum(album);
 
+        // 3. Guardar
         TrackEntity savedEntity = trackRepository.save(entity);
-
         return toDto(savedEntity);
     }
 

@@ -34,24 +34,35 @@ public class AlbumService {
         return albumRepository.findById(id).map(this::toDto);
     }
 
-    public Album createAlbum(String artistId, CreateAlbumRequest request) {
-        
+public Album createAlbum(String artistId, CreateAlbumRequest request) {
+        // 1. Buscar al artista
         ArtistEntity artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new RuntimeException("Artista no encontrado"));
 
+        // --- VALIDACIÓN 1: DUPLICADOS ---
+        if (albumRepository.existsByTitleAndArtist(request.getTitle(), artist)) {
+            throw new IllegalArgumentException("Error: El artista ya tiene un álbum llamado '" + request.getTitle() + "'");
+        }
+
+        // --- VALIDACIÓN 2: FORMATO IMAGEN ---
+        String url = request.getCoverUrl().toLowerCase();
+        if (!url.endsWith(".jpg") && !url.endsWith(".jpeg") && !url.endsWith(".png") && !url.endsWith(".webp")) {
+             throw new IllegalArgumentException("Error: La portada debe ser una imagen URL (.jpg, .png, .webp)");
+        }
+
+        // 3. Crear la entidad (si pasa las validaciones)
         AlbumEntity entity = new AlbumEntity();
         entity.setId("alb_" + UUID.randomUUID().toString());
         entity.setTitle(request.getTitle());
         entity.setReleaseDate(request.getReleaseDate());
         entity.setCoverUrl(request.getCoverUrl());
-        
         entity.setArtist(artist);
 
+        // 4. Guardar
         AlbumEntity saved = albumRepository.save(entity);
-
         return toDto(saved);
     }
-
+    
     public List<Album> findByArtistId(String artistId) {
         // Filtramos los álbumes que pertenezcan a este ID de artista
         return albumRepository.findAll().stream()

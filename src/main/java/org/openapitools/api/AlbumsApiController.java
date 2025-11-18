@@ -63,14 +63,15 @@ public class AlbumsApiController implements AlbumsApi {
     @Override
     public ResponseEntity<Void> uploadTrack(String idAlbum, UploadTrackRequest uploadTrackRequest) {
         try {
-            // Llamamos al servicio para crear la canción y vincularla al álbum
             trackService.createTrackForAlbum(idAlbum, uploadTrackRequest);
-            
-            // Devolvemos 201 Created
             return ResponseEntity.status(HttpStatus.CREATED).build();
             
+        } catch (IllegalArgumentException e) {
+            // Si fallan las validaciones (formato o duplicado) -> 400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            
         } catch (RuntimeException e) {
-            // Si el álbum no existe, devolvemos 404
+            // Si no encuentra el álbum -> 404 Not Found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
