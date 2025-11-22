@@ -30,6 +30,9 @@ public class UploadTrackRequest {
 
   private String fileUrl;
 
+  @JsonProperty("genre")
+  private String genre;
+
   public UploadTrackRequest() {
     super();
   }
@@ -37,10 +40,11 @@ public class UploadTrackRequest {
   /**
    * Constructor with only required parameters
    */
-  public UploadTrackRequest(String title, String duration, String fileUrl) {
+  public UploadTrackRequest(String title, String duration, String fileUrl, String genre) {
     this.title = title;
     this.duration = duration;
     this.fileUrl = fileUrl;
+    this.genre = genre;
   }
 
   public UploadTrackRequest title(String title) {
@@ -101,6 +105,24 @@ public class UploadTrackRequest {
 
   public void setFileUrl(String fileUrl) {
     this.fileUrl = fileUrl;
+  }
+
+  public UploadTrackRequest genre(String genre) {
+    this.genre = genre;
+    return this;
+  }
+  /**
+   * Get genre
+   * @return genre
+   */
+  @NotNull
+  @Schema(name = "genre", example = "Rock", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("genre")
+  public String getGenre() {
+    return genre;
+  }
+  public void setGenre(String genre) {
+    this.genre = genre;
   }
 
   @Override

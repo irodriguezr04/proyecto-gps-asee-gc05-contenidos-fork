@@ -14,20 +14,17 @@ import java.util.Objects;
 public class ArtistEntity {
 
     @Id
-    @Column(nullable = false, unique = true)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <--- CAMBIO: BIGSERIAL
+    private Long id;                                    // <--- CAMBIO: Long
 
-    // ID del microservicio de usuarios [cite: 576, 664]
-    @Column(name = "user_id") 
+    @Column(name = "user_id")
     private String userId;
 
     @Column(nullable = false)
     private String name;
-
     private String description;
     private String genre;
 
-    // RELACIÓN (Tarea: Relacionar): Un artista tiene muchos álbumes
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AlbumEntity> albums = new ArrayList<>();
 
@@ -37,12 +34,12 @@ public class ArtistEntity {
 
     // --- Getters y Setters ---
     
-    public String getId() {
-        return id;
+    public Long getId() { 
+        return id; 
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(Long id) { 
+        this.id = id; 
     }
 
     public String getUserId() {

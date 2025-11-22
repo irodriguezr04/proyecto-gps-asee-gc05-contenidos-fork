@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TrackRepository extends JpaRepository<TrackEntity, String> {
+public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
     // Busca si ya existe una canción con ese título en ESE álbum
     boolean existsByTitleAndAlbum(String title, AlbumEntity album);
 }

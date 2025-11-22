@@ -7,12 +7,10 @@ C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\o
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\service\ArtistService.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\service\TrackService.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\entities\AlbumEntity.java
-C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\entities\SubscriptionEntity.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\model\Subscription.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\service\SubscriptionService.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\OpenApiGeneratorApplication.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\model\Track.java
-C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\repositories\SubscriptionRepository.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\api\ArtistsApiController.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\model\Artist.java
 C:\Users\ismae\Desktop\GPS\proyecto-gps-asee-gc05-contenidos\src\main\java\org\openapitools\repositories\ArtistRepository.java

@@ -12,19 +12,25 @@ import java.util.Objects;
 public class TrackEntity {
 
     @Id
-    @Column(nullable = false, unique = true)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <--- CAMBIO
+    private Long id;                                    // <--- CAMBIO
 
     @Column(nullable = false)
     private String title;
-
     private String duration;
+    
+    @Column(name = "file_url")
     private String fileUrl;
+    
+    @Column(name = "published_at")
     private String publishedAt;
 
-    // RELACIÓN (Tarea: Relacionar): Muchas canciones pertenecen a un álbum [cite: 580]
+    // --- NUEVO CAMPO ---
+    @Column(name = "genre")
+    private String genre; 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "album_id", nullable = false) // Clave foránea
+    @JoinColumn(name = "album_id", nullable = false)
     private AlbumEntity album;
 
     // --- Constructores ---
@@ -32,13 +38,20 @@ public class TrackEntity {
     }
 
     // --- Getters y Setters ---
-
-    public String getId() {
-        return id;
+    public Long getId() { 
+        return id; 
+    }
+    
+    public void setId(Long id) { 
+        this.id = id; 
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getGenre() { 
+        return genre; 
+    } 
+
+    public void setGenre(String genre) { 
+        this.genre = genre; 
     }
 
     public String getTitle() {

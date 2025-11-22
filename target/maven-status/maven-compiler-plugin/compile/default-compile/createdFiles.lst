@@ -5,11 +5,9 @@ org\openapitools\service\AlbumService.class
 org\openapitools\OpenApiGeneratorApplication.class
 org\openapitools\persistence\repositories\AlbumRepository.class
 org\openapitools\model\UploadTrackRequest.class
-org\openapitools\persistence\repositories\SubscriptionRepository.class
 org\openapitools\persistence\repositories\TrackRepository.class
 org\openapitools\api\AlbumsApiController.class
 org\openapitools\persistence\entities\ArtistEntity.class
-org\openapitools\persistence\entities\SubscriptionEntity.class
 org\openapitools\api\ApiUtil.class
 org\openapitools\model\Track.class
 org\openapitools\api\ArtistsApiController.class

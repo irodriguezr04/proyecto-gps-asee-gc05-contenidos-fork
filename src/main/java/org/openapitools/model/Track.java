@@ -36,6 +36,9 @@ public class Track {
 
   private @Nullable String publishedAt;
 
+  private @Nullable String genre;
+
+
   public Track id(@Nullable String id) {
     this.id = id;
     return this;
@@ -154,6 +157,24 @@ public class Track {
 
   public void setPublishedAt(@Nullable String publishedAt) {
     this.publishedAt = publishedAt;
+  }
+
+  public Track genre(@Nullable String genre) {
+    this.genre = genre;
+    return this;
+  }
+  /**
+   * Get genre
+   * @return genre
+   */
+  @Schema(name = "genre", example = "Rock", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("genre")
+  public @Nullable String getGenre() {
+    return genre;
+  }
+
+  public void setGenre(@Nullable String genre) {
+    this.genre = genre;
   }
 
   @Override

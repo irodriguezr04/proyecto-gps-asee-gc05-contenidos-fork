@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -82,5 +84,20 @@ public class ArtistsApiController implements ArtistsApi {
     @Override
     public ResponseEntity<List<Subscription>> getArtistSubscribers(String idArtist) {
         return ResponseEntity.ok(subscriptionService.findSubscribersByArtist(idArtist));
+    }
+
+    // --- GET: Listado de Artistas (CON FILTROS Y PAGINACIÓN) ---
+    
+    @GetMapping("/artists")
+    public ResponseEntity<List<Artist>> listArtists(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String name,  // Filtro por nombre
+            @RequestParam(required = false) String genre  // Filtro por género
+    ) {
+        System.out.println("--> Buscando artistas. Name: " + name + ", Genre: " + genre); // Debug
+        
+        List<Artist> artists = artistService.findArtists(page, size, name, genre);
+        return ResponseEntity.ok(artists);
     }
 }

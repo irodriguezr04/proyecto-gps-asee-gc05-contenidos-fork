@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -74,5 +76,17 @@ public class AlbumsApiController implements AlbumsApi {
             // Si no encuentra el álbum -> 404 Not Found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping("/albums")
+    public ResponseEntity<List<Album>> listAlbums(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String genre
+    ) {
+        // Llamamos al nuevo método del servicio con los parámetros
+        List<Album> albums = albumService.findAlbums(page, size, title, genre);
+        return ResponseEntity.ok(albums);
     }
 }

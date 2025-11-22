@@ -1,44 +1,35 @@
 package org.openapitools.service;
 
 import org.openapitools.model.Subscription;
-import org.openapitools.persistence.entities.SubscriptionEntity;
-import org.openapitools.persistence.repositories.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.client.RestTemplate;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class SubscriptionService {
 
     @Autowired
-    private SubscriptionRepository subscriptionRepository;
+    private RestTemplate restTemplate;
 
-    /**
-     * Tarea: Consultar usuarios que siguen al artista.
-     */
+    // URL del microservicio de Usuarios (ajusta el puerto si es necesario)
+    private final String USERS_SERVICE_URL = "http://localhost:8080/users"; 
+
     public List<Subscription> findSubscribersByArtist(String artistId) {
-        // 1. Buscamos en BD usando el repositorio
-        List<SubscriptionEntity> entities = subscriptionRepository.findByArtistId(artistId);
-        
-        // 2. Convertimos a DTOs
-        return entities.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
+        // Hacemos una petición HTTP GET al otro microservicio
+        // Supongamos que el endpoint allí es /users/subscriptions/artist/{id}
+        String url = USERS_SERVICE_URL + "/subscriptions/artist/" + artistId;
 
-    // Conversor Entidad -> DTO
-    private Subscription toDto(SubscriptionEntity entity) {
-        Subscription dto = new Subscription();
-        dto.setUserId(entity.getUserId());
-        dto.setCreatedAt(entity.getCreatedAt());
-        // Obtenemos el ID del artista desde la entidad relacionada
-        if (entity.getArtist() != null) {
-            dto.setArtistId(entity.getArtist().getId());
+        // NOTA: Esto fallará si el microservicio de usuarios no está levantado.
+        // En un entorno real usaríamos FeignClient o WebClient con CircuitBreaker.
+        try {
+            Subscription[] response = restTemplate.getForObject(url, Subscription[].class);
+            return Arrays.asList(response);
+        } catch (Exception e) {
+            // Si falla, devolvemos lista vacía o lanzamos error
+            System.err.println("Error conectando con Microservicio Usuarios: " + e.getMessage());
+            return List.of(); 
         }
-        return dto;
     }
 }

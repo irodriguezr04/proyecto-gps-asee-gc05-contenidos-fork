@@ -14,21 +14,18 @@ import java.util.Objects;
 public class AlbumEntity {
 
     @Id
-    @Column(nullable = false, unique = true)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <--- CAMBIO
+    private Long id;                                    // <--- CAMBIO
 
     @Column(nullable = false)
     private String title;
-
     private String releaseDate;
     private String coverUrl;
 
-    // RELACIÓN (Tarea: Relacionar): Muchos álbumes pertenecen a un artista [cite: 580]
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id", nullable = false) // Clave foránea
+    @JoinColumn(name = "artist_id", nullable = false)
     private ArtistEntity artist;
 
-    // RELACIÓN (Tarea: Relacionar): Un álbum tiene muchas canciones
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TrackEntity> tracks = new ArrayList<>();
 
@@ -38,12 +35,12 @@ public class AlbumEntity {
 
     // --- Getters y Setters ---
 
-    public String getId() {
-        return id;
+    public Long getId() {   
+        return id; 
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(Long id) { 
+        this.id = id; 
     }
 
     public String getTitle() {
