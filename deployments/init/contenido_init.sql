@@ -2,15 +2,14 @@
 -- PostgreSQL database dump
 --
 
-\restrict Brb1vA5XX0RlYTU3m4DEGH0flZh22uJsRFiMaeJcQvf1SKsNXHKJqEeBLvBuDJK
+\restrict 8I2TJc4qpah3hUINoKs44mua30DF3Kcglvxm1fIZXUw8mmMGKaMFRBq3pZuwxSG
 
--- Dumped from database version 18.0 (Debian 18.0-1.pgdg13+3)
--- Dumped by pg_dump version 18.0 (Debian 18.0-1.pgdg13+3)
+-- Dumped from database version 16.11 (Debian 16.11-1.pgdg13+1)
+-- Dumped by pg_dump version 16.11 (Debian 16.11-1.pgdg13+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
--- SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -28,11 +27,11 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.albums (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     artist_id integer NOT NULL,
     label_id integer,
     title character varying(255) NOT NULL,
-    releasedate date,
+    publishedat date,
     coverurl character varying(255)
 );
 
@@ -44,7 +43,6 @@ ALTER TABLE public.albums OWNER TO usuario;
 --
 
 CREATE SEQUENCE public.albums_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -66,7 +64,7 @@ ALTER SEQUENCE public.albums_id_seq OWNED BY public.albums.id;
 --
 
 CREATE TABLE public.artists (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying(255) NOT NULL,
     description text,
     genre character varying(100)
@@ -80,7 +78,6 @@ ALTER TABLE public.artists OWNER TO usuario;
 --
 
 CREATE SEQUENCE public.artists_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -102,7 +99,7 @@ ALTER SEQUENCE public.artists_id_seq OWNED BY public.artists.id;
 --
 
 CREATE TABLE public.labels (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying(255) NOT NULL,
     description text
 );
@@ -115,7 +112,6 @@ ALTER TABLE public.labels OWNER TO usuario;
 --
 
 CREATE SEQUENCE public.labels_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -133,26 +129,14 @@ ALTER SEQUENCE public.labels_id_seq OWNED BY public.labels.id;
 
 
 --
--- Name: subscriptions; Type: TABLE; Schema: public; Owner: usuario
---
-
-CREATE TABLE public.subscriptions (
-    userid character varying(50) NOT NULL,
-    artistid integer NOT NULL,
-    createdat timestamp without time zone DEFAULT CURRENT_TIMESTAMP
-);
-
-
-ALTER TABLE public.subscriptions OWNER TO usuario;
-
---
 -- Name: tracks; Type: TABLE; Schema: public; Owner: usuario
 --
 
 CREATE TABLE public.tracks (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     album_id integer NOT NULL,
     title character varying(255) NOT NULL,
+    genre character varying(100) NOT NULL,
     duration interval,
     fileurl character varying(255),
     publishedat timestamp without time zone
@@ -166,7 +150,6 @@ ALTER TABLE public.tracks OWNER TO usuario;
 --
 
 CREATE SEQUENCE public.tracks_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -215,7 +198,9 @@ ALTER TABLE ONLY public.tracks ALTER COLUMN id SET DEFAULT nextval('public.track
 -- Data for Name: albums; Type: TABLE DATA; Schema: public; Owner: usuario
 --
 
-COPY public.albums (id, artist_id, label_id, title, releasedate, coverurl) FROM stdin;
+COPY public.albums (id, artist_id, label_id, title, publishedat, coverurl) FROM stdin;
+1	1	1	A Night at the Opera	1975-11-21	http://url-de-ejemplo.com/cover.jpg
+2	2	2	Back in Black	1980-07-25	http://url-ejemplo.com/acdc-cover.jpg
 \.
 
 
@@ -224,6 +209,8 @@ COPY public.albums (id, artist_id, label_id, title, releasedate, coverurl) FROM 
 --
 
 COPY public.artists (id, name, description, genre) FROM stdin;
+1	Queen	Legendary British rock band	Rock
+2	AC/DC	Legendary Australian hard rock band formed in Sydney	Hard Rock
 \.
 
 
@@ -232,14 +219,8 @@ COPY public.artists (id, name, description, genre) FROM stdin;
 --
 
 COPY public.labels (id, name, description) FROM stdin;
-\.
-
-
---
--- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: usuario
---
-
-COPY public.subscriptions (userid, artistid, createdat) FROM stdin;
+1	EMI Records	British multinational music recording and publishing company
+2	Atlantic Records	American major record label founded in 1947
 \.
 
 
@@ -247,7 +228,13 @@ COPY public.subscriptions (userid, artistid, createdat) FROM stdin;
 -- Data for Name: tracks; Type: TABLE DATA; Schema: public; Owner: usuario
 --
 
-COPY public.tracks (id, album_id, title, duration, fileurl, publishedat) FROM stdin;
+COPY public.tracks (id, album_id, title, genre, duration, fileurl, publishedat) FROM stdin;
+1	1	Bohemian Rhapsody	Rock	00:05:55	http://files.com/track1.mp3	2025-11-19 18:03:25.207978
+2	1	You're My Best Friend	Pop Rock	00:02:52	http://files.com/track2.mp3	2025-11-19 18:03:25.207978
+3	1	Love of My Life	Ballad	00:03:39	http://files.com/track3.mp3	2025-11-19 18:03:25.207978
+4	2	Hells Bells	Hard Rock	00:05:12	http://files.com/hellsbells.mp3	2025-11-19 18:05:13.355234
+5	2	Shoot to Thrill	Hard Rock	00:05:17	http://files.com/shottothrill.mp3	2025-11-19 18:05:13.355234
+6	2	Back in Black	Hard Rock	00:04:15	http://files.com/backinblack.mp3	2025-11-19 18:05:13.355234
 \.
 
 
@@ -255,28 +242,28 @@ COPY public.tracks (id, album_id, title, duration, fileurl, publishedat) FROM st
 -- Name: albums_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario
 --
 
-SELECT pg_catalog.setval('public.albums_id_seq', 1, false);
+SELECT pg_catalog.setval('public.albums_id_seq', 2, true);
 
 
 --
 -- Name: artists_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario
 --
 
-SELECT pg_catalog.setval('public.artists_id_seq', 1, false);
+SELECT pg_catalog.setval('public.artists_id_seq', 2, true);
 
 
 --
 -- Name: labels_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario
 --
 
-SELECT pg_catalog.setval('public.labels_id_seq', 1, false);
+SELECT pg_catalog.setval('public.labels_id_seq', 2, true);
 
 
 --
 -- Name: tracks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario
 --
 
-SELECT pg_catalog.setval('public.tracks_id_seq', 1, false);
+SELECT pg_catalog.setval('public.tracks_id_seq', 6, true);
 
 
 --
@@ -304,14 +291,6 @@ ALTER TABLE ONLY public.labels
 
 
 --
--- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario
---
-
-ALTER TABLE ONLY public.subscriptions
-    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (userid, artistid);
-
-
---
 -- Name: tracks tracks_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario
 --
 
@@ -336,14 +315,6 @@ ALTER TABLE ONLY public.albums
 
 
 --
--- Name: subscriptions subscriptions_artistid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: usuario
---
-
-ALTER TABLE ONLY public.subscriptions
-    ADD CONSTRAINT subscriptions_artistid_fkey FOREIGN KEY (artistid) REFERENCES public.artists(id) ON DELETE CASCADE;
-
-
---
 -- Name: tracks tracks_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: usuario
 --
 
@@ -355,5 +326,5 @@ ALTER TABLE ONLY public.tracks
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Brb1vA5XX0RlYTU3m4DEGH0flZh22uJsRFiMaeJcQvf1SKsNXHKJqEeBLvBuDJK
+\unrestrict 8I2TJc4qpah3hUINoKs44mua30DF3Kcglvxm1fIZXUw8mmMGKaMFRBq3pZuwxSG
 
