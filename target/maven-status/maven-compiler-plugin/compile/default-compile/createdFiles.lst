@@ -7,9 +7,11 @@ org\openapitools\persistence\repositories\AlbumRepository.class
 org\openapitools\model\UploadTrackRequest.class
 org\openapitools\persistence\repositories\TrackRepository.class
 org\openapitools\api\AlbumsApiController.class
+org\openapitools\configuration\CorsConfig.class
 org\openapitools\persistence\entities\ArtistEntity.class
 org\openapitools\api\ApiUtil.class
 org\openapitools\model\Track.class
+org\openapitools\configuration\CorsConfig$1.class
 org\openapitools\api\ArtistsApiController.class
 org\openapitools\service\SubscriptionService.class
 org\openapitools\model\CreateAlbumRequest.class
