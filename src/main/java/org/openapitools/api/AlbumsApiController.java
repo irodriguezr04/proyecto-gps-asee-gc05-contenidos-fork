@@ -51,16 +51,6 @@ public class AlbumsApiController implements AlbumsApi {
                 .orElse(ResponseEntity.notFound().build()); // Si no -> 404 Not Found
     }
 
-    /**
-     * GET /albums : Listado de álbumes
-     */
-    @Override
-    public ResponseEntity<List<Album>> listAlbums() {
-        // Llamamos al servicio para buscar todos
-        List<Album> albums = albumService.findAll();
-        return ResponseEntity.ok(albums);
-    }
-
     // --- POST: Subir Canción ---
     @Override
     public ResponseEntity<Void> uploadTrack(String idAlbum, UploadTrackRequest uploadTrackRequest) {
@@ -78,15 +68,27 @@ public class AlbumsApiController implements AlbumsApi {
         }
     }
 
-    @GetMapping("/albums")
-    public ResponseEntity<List<Album>> listAlbums(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String genre
-    ) {
-        // Llamamos al nuevo método del servicio con los parámetros
+    @Override
+    public ResponseEntity<List<Album>> listAlbums() {
+        // 1. Leemos los parámetros manualmente del objeto 'request'
+        // Esto evita conflictos con la interfaz generada
+        String pageStr = request.getParameter("page");
+        String sizeStr = request.getParameter("size");
+        String title = request.getParameter("title");
+        String genre = request.getParameter("genre");
+
+        // 2. Convertimos a números (con valores por defecto)
+        Integer page = (pageStr != null) ? Integer.parseInt(pageStr) : 0;
+        Integer size = (sizeStr != null) ? Integer.parseInt(sizeStr) : 10;
+
+        // --- CHIVATO ---
+        System.out.println("🔥 PETICIÓN RECIBIDA (Método Manual):");
+        System.out.println("   👉 Title: " + title);
+        System.out.println("   👉 Genre: " + genre);
+
+        // 3. Llamamos al servicio
         List<Album> albums = albumService.findAlbums(page, size, title, genre);
+        
         return ResponseEntity.ok(albums);
     }
 }

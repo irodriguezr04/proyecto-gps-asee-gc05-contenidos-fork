@@ -1,22 +1,20 @@
 package org.openapitools.api;
 
-import org.openapitools.model.Album;
 import org.openapitools.model.Artist;
+import org.openapitools.model.Album;
 import org.openapitools.model.CreateAlbumRequest;
-import org.openapitools.model.Track;
 import org.openapitools.model.Subscription;
-import org.openapitools.service.AlbumService;
+import org.openapitools.model.Track;
 import org.openapitools.service.ArtistService;
-import org.openapitools.service.TrackService;
+import org.openapitools.service.AlbumService;
 import org.openapitools.service.SubscriptionService;
+import org.openapitools.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +30,13 @@ public class ArtistsApiController implements ArtistsApi {
     private final SubscriptionService subscriptionService;
 
     @Autowired
-    public ArtistsApiController(NativeWebRequest request, ArtistService artistService, AlbumService albumService, TrackService trackService, SubscriptionService subscriptionService) {
+    public ArtistsApiController(
+            NativeWebRequest request,
+            ArtistService artistService,
+            AlbumService albumService,
+            TrackService trackService,
+            SubscriptionService subscriptionService
+    ) {
         this.request = request;
         this.artistService = artistService;
         this.albumService = albumService;
@@ -45,6 +49,7 @@ public class ArtistsApiController implements ArtistsApi {
         return Optional.ofNullable(request);
     }
 
+    // --- GET: Información de artista por ID ---
     @Override
     public ResponseEntity<Artist> getArtistById(String idArtist) {
         return artistService.findById(idArtist)
@@ -52,52 +57,53 @@ public class ArtistsApiController implements ArtistsApi {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // --- GET: Listado de artistas (MANUAL / BLINDADO) ---
     @Override
     public ResponseEntity<List<Artist>> listArtists() {
-        return ResponseEntity.ok(artistService.findAll());
+        // 1. Lectura manual de parámetros para evitar conflictos de firma
+        String pageStr = request.getParameter("page");
+        String sizeStr = request.getParameter("size");
+        String name = request.getParameter("name");
+        String genre = request.getParameter("genre");
+
+        // 2. Conversión segura
+        Integer page = (pageStr != null) ? Integer.parseInt(pageStr) : 0;
+        Integer size = (sizeStr != null) ? Integer.parseInt(sizeStr) : 10;
+
+        // 3. Chivato
+        System.out.println("🎤 ARTISTAS: Petición recibida. Name='" + name + "', Genre='" + genre + "'");
+
+        // 4. Llamada al servicio
+        List<Artist> artists = artistService.findArtists(page, size, name, genre);
+        return ResponseEntity.ok(artists);
     }
 
+    // --- POST: Crear Álbum ---
     @Override
     public ResponseEntity<Void> createAlbum(String idArtist, CreateAlbumRequest createAlbumRequest) {
-        // Llamamos al servicio para crear y vincular
         try {
             albumService.createAlbum(idArtist, createAlbumRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).build(); // 201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (RuntimeException e) {
-            // Si el artista no existe
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+    // --- GET: Listar Álbumes de un Artista ---
     @Override
     public ResponseEntity<List<Album>> listArtistAlbums(String idArtist) {
-        // Llamamos al servicio para buscar solo los de este artista
-        List<Album> albums = albumService.findByArtistId(idArtist);
-        return ResponseEntity.ok(albums);
+        return ResponseEntity.ok(albumService.findByArtistId(idArtist));
     }
 
+    // --- GET: Listar Canciones de un Artista ---
     @Override
     public ResponseEntity<List<Track>> listArtistTracks(String idArtist) {
         return ResponseEntity.ok(trackService.findByArtistId(idArtist));
     }
 
+    // --- GET: Suscriptores ---
     @Override
     public ResponseEntity<List<Subscription>> getArtistSubscribers(String idArtist) {
         return ResponseEntity.ok(subscriptionService.findSubscribersByArtist(idArtist));
-    }
-
-    // --- GET: Listado de Artistas (CON FILTROS Y PAGINACIÓN) ---
-    
-    @GetMapping("/artists")
-    public ResponseEntity<List<Artist>> listArtists(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) String name,  // Filtro por nombre
-            @RequestParam(required = false) String genre  // Filtro por género
-    ) {
-        System.out.println("--> Buscando artistas. Name: " + name + ", Genre: " + genre); // Debug
-        
-        List<Artist> artists = artistService.findArtists(page, size, name, genre);
-        return ResponseEntity.ok(artists);
     }
 }
