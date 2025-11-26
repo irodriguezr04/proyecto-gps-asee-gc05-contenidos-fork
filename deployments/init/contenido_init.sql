@@ -227,15 +227,15 @@ COPY public.artists (id, name, description, genre, user_id) FROM stdin;
 3	Miles Davis	American jazz trumpeter, bandleader, and composer	Jazz	\N
 4	Fito & Fitipaldis	Spanish rock band formed by Fito Cabrales	Pop Rock	\N
 5	Metallica	American heavy metal band formed in Los Angeles	Metal	\N
-7	Ludwig van Beethoven	German composer and pianist, a crucial figure in the transition between the Classical and Romantic eras	Cl├ö├Â┬úÔö£┬ísica	\N
-8	Avicii	Swedish DJ, remixer, and music producer known for melodic house	Electr├ö├Â┬ú├ö├Â├®nica	\N
+7	Ludwig van Beethoven	German composer and pianist, a crucial figure in the transition between the Classical and Romantic eras	Clásica	\N
+8	Avicii	Swedish DJ, remixer, and music producer known for melodic house	Electrónica	\N
 9	Bad Bunny	Puerto Rican rapper and singer, known as the King of Latin Trap	Urbano	\N
 10	Dire Straits	British rock band led by Mark Knopfler, known for their distinct sound and guitar style	Rock	\N
 11	Arctic Monkeys	English rock band formed in Sheffield, famous for their internet-driven rise	Indie	\N
-13	Aitana	Spanish singer and songwriter, gained national recognition in Operaci├ö├Â┬ú├ö├Â├®n Triunfo	Pop	\N
+13	Aitana	Spanish singer and songwriter, gained national recognition in Operación Triunfo	Pop	\N
 14	Eminem	American rapper, songwriter, and record producer, cited as one of the greatest of all time	Urbano	\N
 15	Kidd Keo	Spanish trap artist known for his bilingual flow mixing English and Spanish	Urbano	\N
-16	David Guetta	French DJ and music producer, considered the grandfather of EDM	Electr├ö├Â┬ú├ö├Â├®nica	\N
+16	David Guetta	French DJ and music producer, considered the grandfather of EDM	Electrónica	\N
 \.
 
 
@@ -296,17 +296,17 @@ COPY public.tracks (id, album_id, title, genre, duration, file_url, published_at
 43	15	Moon Talk	Pop	00:03:20	\N	2025-11-23 21:48:39.707357
 46	16	Little Bad Girl (feat. Ludacris)	Urbano	00:03:12	\N	2025-11-23 21:52:24.713969
 47	16	Without You (feat. Usher)	Pop	00:03:28	\N	2025-11-23 21:52:24.713969
-21	7	Symphony No. 5: Allegro con brio	ClÔö£├¡sica	00:07:18	\N	2025-11-23 21:27:54.37997
-23	7	Moonlight Sonata (Adagio sostenuto)	ClÔö£├¡sica	00:06:00	\N	2025-11-23 21:27:54.37997
-24	8	Wake Me Up	ElectrÔö£Ôöénica	00:04:07	\N	2025-11-23 21:29:40.14986
-25	8	Hey Brother	ElectrÔö£Ôöénica	00:04:15	\N	2025-11-23 21:29:40.14986
-44	15	Ma Vie	ElectrÔö£Ôöénica	00:03:45	\N	2025-11-23 21:48:39.707357
-45	16	Titanium (feat. Sia)	ElectrÔö£Ôöénica	00:04:05	\N	2025-11-23 21:52:24.713969
-10	4	Me equivocarÔö£┬ía otra vez	Pop Rock	00:05:20	\N	2025-11-23 21:14:01.399583
-22	7	Fur Elise (Bagatelle No. 25)	ClÔö£├¡sica	00:03:25	\N	2025-11-23 21:27:54.37997
-27	9	TitÔö£┬í Me PreguntÔö£Ôöé	Urbano	00:04:03	\N	2025-11-23 21:35:55.953306
-37	13	+ (MÔö£├¡s)	Pop	00:03:39	\N	2025-11-23 21:44:30.350007
-38	13	No te has ido y ya te extraÔö£ÔûÆo	Pop	00:03:29	\N	2025-11-23 21:44:30.350007
+21	7	Symphony No. 5: Allegro con brio	Clásica	00:07:18	\N	2025-11-23 21:27:54.37997
+23	7	Moonlight Sonata (Adagio sostenuto)	Clásica	00:06:00	\N	2025-11-23 21:27:54.37997
+24	8	Wake Me Up	Electrónica	00:04:07	\N	2025-11-23 21:29:40.14986
+25	8	Hey Brother	Electrónica	00:04:15	\N	2025-11-23 21:29:40.14986
+44	15	Ma Vie	Electrónica	00:03:45	\N	2025-11-23 21:48:39.707357
+45	16	Titanium (feat. Sia)	Electrónica	00:04:05	\N	2025-11-23 21:52:24.713969
+10	4	Me equivocaría otra vez	Pop Rock	00:05:20	\N	2025-11-23 21:14:01.399583
+22	7	Fur Elise (Bagatelle No. 25)	Clásica	00:03:25	\N	2025-11-23 21:27:54.37997
+27	9	Tití Me Preguntó	Urbano	00:04:03	\N	2025-11-23 21:35:55.953306
+37	13	+ (Más)	Pop	00:03:39	\N	2025-11-23 21:44:30.350007
+38	13	No te has ido y ya te extraño	Pop	00:03:29	\N	2025-11-23 21:44:30.350007
 \.
 
 
