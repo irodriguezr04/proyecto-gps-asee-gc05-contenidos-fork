@@ -23,4 +23,6 @@ public interface AlbumRepository extends JpaRepository<AlbumEntity, Long> { // <
 
     // 3. Título Y Género (Este también te daba error)
     Page<AlbumEntity> findByTitleContainingIgnoreCaseAndArtist_GenreContainingIgnoreCase(String title, String genre, Pageable pageable);
+
+    Page<AlbumEntity> findByArtist_NameContainingIgnoreCase(String artistName, Pageable pageable);
 }

@@ -68,26 +68,33 @@ public class AlbumsApiController implements AlbumsApi {
         }
     }
 
+// --- GET: Listar álbumes (MANUAL / BLINDADO V2) ---
     @Override
     public ResponseEntity<List<Album>> listAlbums() {
-        // 1. Leemos los parámetros manualmente del objeto 'request'
-        // Esto evita conflictos con la interfaz generada
+        // 1. Leemos los parámetros manualmente
         String pageStr = request.getParameter("page");
         String sizeStr = request.getParameter("size");
-        String title = request.getParameter("title");
+        
+        // NUEVO: Leemos 'search' (el texto) y 'type' (dónde buscar)
+        String search = request.getParameter("search");
+        // Compatibilidad: si el frontend manda 'title' antiguo, lo usamos como search
+        if (search == null) search = request.getParameter("title");
+        
+        String type = request.getParameter("type"); // "album", "artist" o "track"
         String genre = request.getParameter("genre");
 
-        // 2. Convertimos a números (con valores por defecto)
+        // 2. Convertimos a números
         Integer page = (pageStr != null) ? Integer.parseInt(pageStr) : 0;
         Integer size = (sizeStr != null) ? Integer.parseInt(sizeStr) : 10;
 
         // --- CHIVATO ---
-        System.out.println("🔥 PETICIÓN RECIBIDA (Método Manual):");
-        System.out.println("   👉 Title: " + title);
+        System.out.println("🔥 PETICIÓN RECIBIDA (Búsqueda Avanzada):");
+        System.out.println("   👉 Search: " + search);
+        System.out.println("   👉 Type: " + type);
         System.out.println("   👉 Genre: " + genre);
 
-        // 3. Llamamos al servicio
-        List<Album> albums = albumService.findAlbums(page, size, title, genre);
+        // 3. Llamamos al servicio (AHORA CON 5 ARGUMENTOS)
+        List<Album> albums = albumService.findAlbums(page, size, search, type, genre);
         
         return ResponseEntity.ok(albums);
     }

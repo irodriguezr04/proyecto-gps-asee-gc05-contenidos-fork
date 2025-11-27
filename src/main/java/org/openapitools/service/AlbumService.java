@@ -96,34 +96,45 @@ public class AlbumService {
         }
     }
 
-    /**
-     * HU6: Listado paginado y filtrado de álbumes (Título y Género).
+/**
+     * HU6: Búsqueda por Tipo (Album, Artista) + Filtro Género
      */
-    public List<Album> findAlbums(Integer page, Integer size, String title, String genre) {
-        // 1. Configurar paginación
+    public List<Album> findAlbums(Integer page, Integer size, String search, String searchType, String genre) {
         int pageNumber = (page != null) ? page : 0;
         int pageSize = (size != null) ? size : 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("title").ascending());
 
+        if (genre != null && (genre.trim().isEmpty() || "Todas".equalsIgnoreCase(genre))) genre = null;
+        if (search != null && search.trim().isEmpty()) search = null;
+        if (searchType == null) searchType = "album";
+
         Page<AlbumEntity> pageResult;
 
-        boolean hasTitle = (title != null && !title.isEmpty());
-        boolean hasGenre = (genre != null && !genre.isEmpty());
+        System.out.println("🔍 BUSCANDO: Tipo='" + searchType + "', Query='" + search + "', Genre='" + genre + "'");
 
-        // 2. Lógica de filtros
-        if (hasTitle && hasGenre) {
-            pageResult = albumRepository.findByTitleContainingIgnoreCaseAndArtist_GenreContainingIgnoreCase(title, genre, pageable);
-        } else if (hasTitle) {
-            pageResult = albumRepository.findByTitleContainingIgnoreCase(title, pageable);
-        } else if (hasGenre) {
-            pageResult = albumRepository.findByArtist_GenreContainingIgnoreCase(genre, pageable);
+        if (search == null) {
+            // Sin texto de búsqueda
+            if (genre != null) pageResult = albumRepository.findByArtist_GenreContainingIgnoreCase(genre, pageable);
+            else pageResult = albumRepository.findAll(pageable);
         } else {
-            pageResult = albumRepository.findAll(pageable);
+            // Con texto de búsqueda
+            switch (searchType.toLowerCase()) {
+                case "artist":
+                    // Buscar por Artista
+                    pageResult = albumRepository.findByArtist_NameContainingIgnoreCase(search, pageable);
+                    break;
+                    
+                // case "track": ELIMINADO PORQUE NO LO QUIERES
+                    
+                case "album":
+                default:
+                    // Buscar por Título del Álbum
+                    pageResult = albumRepository.findByTitleContainingIgnoreCase(search, pageable);
+                    break;
+            }
         }
 
-        return pageResult.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return pageResult.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     // --- Conversor a DTO (Adaptado a toString) ---
