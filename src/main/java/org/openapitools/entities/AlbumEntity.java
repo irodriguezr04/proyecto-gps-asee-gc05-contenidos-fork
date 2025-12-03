@@ -9,6 +9,7 @@ import java.util.Objects;
  * Esta es la ENTIDAD de base de datos para un Álbum.
  * Representa la tabla "albums" en PostgreSQL.
  */
+
 @Entity
 @Table(name = "albums")
 public class AlbumEntity {
