@@ -59,7 +59,6 @@ public class AlbumEntity {
     public String getCoverUrl() {
         return coverUrl;
     }
-
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
     }
