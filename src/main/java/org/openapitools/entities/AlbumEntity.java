@@ -33,7 +33,7 @@ public class AlbumEntity {
     // --- Constructores ---
     public AlbumEntity() {
     }
-    
+
 
     // --- Getters y Setters ---
 
@@ -44,6 +44,7 @@ public class AlbumEntity {
     public void setId(Long id) { 
         this.id = id; 
     }
+    
 
     public String getTitle() {
         return title;
