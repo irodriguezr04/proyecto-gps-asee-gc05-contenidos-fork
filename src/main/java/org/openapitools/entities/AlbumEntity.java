@@ -48,7 +48,6 @@ public class AlbumEntity {
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getReleaseDate() {
         return releaseDate;
     }
