@@ -19,10 +19,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 @RequestMapping("${openapi.microservicioDeContenidos.base-path:}")
 public class ArtistsApiController implements ArtistsApi {
 
+    private static final Logger logger = LoggerFactory.getLogger(ArtistsApiController.class);
     private final NativeWebRequest request;
     private final ArtistService artistService;
     private final AlbumService albumService;
@@ -71,7 +75,7 @@ public class ArtistsApiController implements ArtistsApi {
         Integer size = (sizeStr != null) ? Integer.parseInt(sizeStr) : 10;
 
         // 3. Chivato
-        System.out.println("🎤 ARTISTAS: Petición recibida. Name='" + name + "', Genre='" + genre + "'");
+        logger.info("🎤 ARTISTAS: Petición recibida. Name='{}', Genre='{}'", name, genre);
 
         // 4. Llamada al servicio
         List<Artist> artists = artistService.findArtists(page, size, name, genre);
