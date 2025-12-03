@@ -33,6 +33,7 @@ public class AlbumEntity {
     // --- Constructores ---
     public AlbumEntity() {
     }
+    
 
     // --- Getters y Setters ---
 
