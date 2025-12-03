@@ -33,7 +33,6 @@ public class AlbumEntity {
     public AlbumEntity() {
     }
 
-
     // --- Getters y Setters ---
 
     public Long getId() {   
