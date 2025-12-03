@@ -53,7 +53,6 @@ public class AlbumEntity {
     public String getReleaseDate() {
         return releaseDate;
     }
-
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
