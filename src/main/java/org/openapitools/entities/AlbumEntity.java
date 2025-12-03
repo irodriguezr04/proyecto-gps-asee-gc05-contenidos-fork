@@ -50,10 +50,11 @@ public class AlbumEntity {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public String getReleaseDate() {
         return releaseDate;
     }
+    
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
