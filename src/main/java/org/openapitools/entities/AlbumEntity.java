@@ -54,7 +54,7 @@ public class AlbumEntity {
     public String getReleaseDate() {
         return releaseDate;
     }
-    
+
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
@@ -62,7 +62,6 @@ public class AlbumEntity {
     public String getCoverUrl() {
         return coverUrl;
     }
-
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
     }
